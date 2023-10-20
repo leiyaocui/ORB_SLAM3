@@ -28,7 +28,7 @@ Camera.fps: 60
 # Color order of the images (0: BGR, 1: RGB. It is ignored if images are grayscale)
 Camera.RGB: 0
 
-# Transformation from body frame (imu) to camera
+# Transformation from camera to body frame (imu)
 IMU.T_b_c1: !!opencv-matrix
    rows: 4
    cols: 4
@@ -53,7 +53,7 @@ Stereo.ThDepth: 14.0
 Stereo.b: 0.01
 
 # Depth map values factor
-RGBD.DepthMapFactor: 5000.0 # 1.0 for ROS_bag
+RGBD.DepthMapFactor: 1000.0 # 1.0 for ROS_bag
 
 #--------------------------------------------------------------------------------------------
 # ORB Parameters
