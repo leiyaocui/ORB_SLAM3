@@ -4,7 +4,6 @@
 **/build
 **/lib
 
-Thirdparty/g2o/config.h
 Vocabulary/ORBvoc.txt
 
 Examples/RGB-D/rgbd_sim

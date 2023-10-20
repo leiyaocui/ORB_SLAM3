@@ -626,7 +626,7 @@ bool LoopClosing::DetectCommonRegionsFromBoW(std::vector<KeyFrame*> &vpBowCand, 
 
 
         bool bAbortByNearKF = false;
-        for(int j=0; j<vpCovKFi.size(); ++j)
+        for(size_t j=0; j<vpCovKFi.size(); ++j)
         {
             if(spConnectedKeyFrames.find(vpCovKFi[j]) != spConnectedKeyFrames.end())
             {
@@ -654,7 +654,7 @@ bool LoopClosing::DetectCommonRegionsFromBoW(std::vector<KeyFrame*> &vpBowCand, 
         std::vector<KeyFrame*> vpKeyFrameMatchedMP = std::vector<KeyFrame*>(mpCurrentKF->GetMapPointMatches().size(), static_cast<KeyFrame*>(NULL));
 
         int nIndexMostBoWMatchesKF=0;
-        for(int j=0; j<vpCovKFi.size(); ++j)
+        for(size_t j=0; j<vpCovKFi.size(); ++j)
         {
             if(!vpCovKFi[j] || vpCovKFi[j]->isBad())
                 continue;
@@ -667,7 +667,7 @@ bool LoopClosing::DetectCommonRegionsFromBoW(std::vector<KeyFrame*> &vpBowCand, 
             }
         }
 
-        for(int j=0; j<vpCovKFi.size(); ++j)
+        for(size_t j=0; j<vpCovKFi.size(); ++j)
         {
             for(int k=0; k < vvpMatchedMPs[j].size(); ++k)
             {
@@ -982,7 +982,7 @@ void LoopClosing::CorrectLoop()
         unique_lock<mutex> lock(mMutexGBA);
         mbStopGBA = true;
 
-        mnFullBAIdx++;
+        mnFullBAIdx |= true;
 
         if(mpThreadGBA)
         {
@@ -1233,7 +1233,7 @@ void LoopClosing::MergeLocal()
         unique_lock<mutex> lock(mMutexGBA);
         mbStopGBA = true;
 
-        mnFullBAIdx++;
+        mnFullBAIdx |= true;
 
         if(mpThreadGBA)
         {
@@ -1806,7 +1806,7 @@ void LoopClosing::MergeLocal2()
         unique_lock<mutex> lock(mMutexGBA);
         mbStopGBA = true;
 
-        mnFullBAIdx++;
+        mnFullBAIdx |= true;
 
         if(mpThreadGBA)
         {
@@ -1839,7 +1839,7 @@ void LoopClosing::MergeLocal2()
         mpLocalMapper->EmptyQueue();
         //cout << "KFs after empty: " << mpAtlas->GetCurrentMap()->KeyFramesInMap() << endl;
 
-        std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
+        // std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
         //cout << "updating active map to merge reference" << endl;
         //cout << "curr merge KF id: " << mpCurrentKF->mnId << endl;
         //cout << "curr tracking KF id: " << mpTracker->GetLastKeyFrame()->mnId << endl;
@@ -1849,7 +1849,7 @@ void LoopClosing::MergeLocal2()
         mpAtlas->GetCurrentMap()->ApplyScaledRotation(T_on,s_on,bScaleVel);
         mpTracker->UpdateFrameIMU(s_on,mpCurrentKF->GetImuBias(),mpTracker->GetLastKeyFrame());
 
-        std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
+        // std::chrono::steady_clock::time_point t3 = std::chrono::steady_clock::now();
     }
 
     const int numKFnew=pCurrentMap->KeyFramesInMap();
