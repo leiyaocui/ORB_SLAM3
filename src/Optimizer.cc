@@ -34,6 +34,7 @@
 #include "g2o/types/sba/types_six_dof_expmap.h"
 #include "g2o/core/robust_kernel_impl.h"
 #include "g2o/solvers/dense/linear_solver_dense.h"
+#include "g2o/types/slam3d/types_slam3d.h"
 #include "G2oTypes.h"
 #include "Converter.h"
 
@@ -991,23 +992,7 @@ int Optimizer::PoseOptimization(Frame *pFrame)
     }
 
     if(nInitialCorrespondences<3)
-        return 0;
-
-    // Add constraint that Z-axis is equal to 0 and only the rotation along the Z-axis is considered
-    // g2o::EdgeSE3Prior * e = new g2o::EdgeSE3Prior();
-    // e->setVertex(0, dynamic_cast<g2o::OptimizableGraph::Vertex*>(optimizer.vertex(0)));
-    // Eigen::Matrix<double, 6, 6> information = Eigen::Matrix<double, 6, 6>::Zero();
-    // information(0, 0) = 1e6;
-    // information(1, 1) = 1e6;
-    // information(2, 2) = 1e-6;
-    // information(3, 3) = 1e6;
-    // information(4, 4) = 1e6;
-    // information(5, 5) = 1e-6;
-    // e->setInformation(information);
-    // Eigen::Matrix<double, 6, 1> measurement = Eigen::Matrix<double, 6, 1>::Zero();
-    // measurement(2) = Tcw.translation().z();
-    // e->setMeasurement(measurement);
-    // optimizer.addEdge(e);
+        return 0; 
 
     // We perform 4 optimizations, after each optimization we classify observation as inlier/outlier
     // At the next optimization, outliers are not included, but at the end they can be classified as inliers again.
