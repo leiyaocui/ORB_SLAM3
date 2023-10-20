@@ -482,7 +482,7 @@ void MapPoint::UpdateNormalAndDepth()
     }
 
     //const int level = pRefKF->mvKeysUn[observations[pRefKF]].octave;
-    const float levelScaleFactor =  pRefKF->mvScaleFactors[level];
+const float levelScaleFactor = pRefKF->mvScaleFactors[level];
     const int nLevels = pRefKF->mnScaleLevels;
 
     {

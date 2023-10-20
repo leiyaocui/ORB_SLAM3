@@ -1,0 +1,31 @@
+{
+    "ros.distro": "humble",
+    "cmake.configureOnOpen": true,
+    "files.associations": {
+        "vector": "cpp",
+        "iosfwd": "cpp",
+        "*.ipp": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "__split_buffer": "cpp",
+        "list": "cpp",
+        "ostream": "cpp",
+        "array": "cpp",
+        "string_view": "cpp",
+        "*.tcc": "cpp",
+        "forward_list": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "any": "cpp",
+        "system_error": "cpp",
+        "__hash_table": "cpp",
+        "__tree": "cpp",
+        "atomic": "cpp",
+        "filesystem": "cpp",
+        "ios": "cpp",
+        "map": "cpp",
+        "set": "cpp",
+        "chrono": "cpp",
+        "memory": "cpp"
+    }
+}
