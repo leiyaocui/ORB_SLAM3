@@ -1,8 +1,8 @@
 **/.vscode
 **/__pycache__
 
-build
-lib
+**/build
+**/lib
 
 Thirdparty/g2o/config.h
 Vocabulary/ORBvoc.txt
