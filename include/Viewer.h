@@ -85,6 +85,7 @@ private:
     bool CheckFinish();
     void SetFinish();
     bool mbFinishRequested;
+    bool mbFinishKeyPress;
     bool mbFinished;
     std::mutex mMutexFinish;
 

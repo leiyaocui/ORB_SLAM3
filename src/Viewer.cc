@@ -27,7 +27,7 @@ namespace ORB_SLAM3
 
 Viewer::Viewer(System* pSystem, FrameDrawer *pFrameDrawer, MapDrawer *pMapDrawer, Tracking *pTracking, const string &strSettingPath, Settings* settings):
     both(false), mpSystem(pSystem), mpFrameDrawer(pFrameDrawer),mpMapDrawer(pMapDrawer), mpTracker(pTracking),
-    mbFinishRequested(false), mbFinished(true), mbStopped(true), mbStopRequested(false)
+    mbFinishRequested(false), mbFinishKeyPress(false), mbFinished(true), mbStopped(true), mbStopRequested(false)
 {
     if(settings){
         newParameterLoader(settings);
@@ -165,6 +165,13 @@ void Viewer::Run()
     mbStopped = false;
 
     pangolin::CreateWindowAndBind("ORB-SLAM3: Map Viewer",1024,768);
+    pangolin::RegisterKeyPressCallback(27, function<void()>([&](){
+        unique_lock<mutex> lock(mMutexFinish);
+        if (mbFinishRequested)
+        {
+            mbFinishKeyPress = true;
+        }
+    }));
 
     // 3D Mouse handler requires depth testing to be enabled
     glEnable(GL_DEPTH_TEST);
@@ -317,26 +324,32 @@ void Viewer::Run()
 
         pangolin::FinishFrame();
 
-        cv::Mat toShow;
-        cv::Mat im = mpFrameDrawer->DrawFrame(trackedImageScale);
-
-        if(both){
-            cv::Mat imRight = mpFrameDrawer->DrawRightFrame(trackedImageScale);
-            cv::hconcat(im,imRight,toShow);
-        }
-        else{
-            toShow = im;
-        }
-
-        if(mImageViewerScale != 1.f)
         {
-            int width = toShow.cols * mImageViewerScale;
-            int height = toShow.rows * mImageViewerScale;
-            cv::resize(toShow, toShow, cv::Size(width, height));
-        }
+        unique_lock<mutex> lock(mMutexFinish);
+        if (!mbFinishRequested)
+        {
+            cv::Mat toShow;
+            cv::Mat im = mpFrameDrawer->DrawFrame(trackedImageScale);
 
-        cv::imshow("ORB-SLAM3: Current Frame",toShow);
-        cv::waitKey(mT);
+            if(both){
+                cv::Mat imRight = mpFrameDrawer->DrawRightFrame(trackedImageScale);
+                cv::hconcat(im,imRight,toShow);
+            }
+            else{
+                toShow = im;
+            }
+
+            if(mImageViewerScale != 1.f)
+            {
+                int width = toShow.cols * mImageViewerScale;
+                int height = toShow.rows * mImageViewerScale;
+                cv::resize(toShow, toShow, cv::Size(width, height));
+            }
+
+            cv::imshow("ORB-SLAM3: Current Frame",toShow);
+            cv::waitKey(mT);
+        }
+        }
 
         if(menuReset)
         {
@@ -363,8 +376,7 @@ void Viewer::Run()
             mpSystem->Shutdown();
 
             // Save camera trajectory
-            mpSystem->SaveTrajectoryEuRoC("CameraTrajectory.txt");
-            mpSystem->SaveKeyFrameTrajectoryEuRoC("KeyFrameTrajectory.txt");
+            mpSystem->SaveTrajectoryTUM("tf_pred.txt");
             menuStop = false;
         }
 
@@ -392,7 +404,7 @@ void Viewer::RequestFinish()
 bool Viewer::CheckFinish()
 {
     unique_lock<mutex> lock(mMutexFinish);
-    return mbFinishRequested;
+    return mbFinishRequested && mbFinishKeyPress;
 }
 
 void Viewer::SetFinish()
